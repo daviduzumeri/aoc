@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var measurements []int
+	measurements := []int{}
 	strMeasurements := strings.Split(string(file), "\n")
 	for _, mstr := range strMeasurements {
 		if mstr == "" {
@@ -25,8 +25,8 @@ func main() {
 		}
 		measurements = append(measurements, m)
 	}
-	var lastWindow int
-	var increases int
+	lastWindow := 0
+	increases := 0
 	for i := 0; i < len(measurements)-2; i++ {
 		window := measurements[i] + measurements[i+1] + measurements[i+2]
 
