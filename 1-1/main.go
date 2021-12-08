@@ -14,26 +14,27 @@ func main() {
 		log.Fatal(err)
 	}
 	var measurements []int
-	for _, strMeasurement := range strings.Split(string(file), "\n") {
-		if strMeasurement == "" {
-			continue
+	strMeasurements := strings.Split(string(file), "\n")
+	for _, mstr := range strMeasurements {
+		if mstr == "" {
+			break
 		}
-		measurement, err := strconv.Atoi(strMeasurement)
+		m, err := strconv.Atoi(mstr)
 		if err != nil {
 			log.Fatal(err)
 		}
-		measurements = append(measurements, measurement)
+		measurements = append(measurements, m)
 	}
 	var lastWindow int
 	var increases int
-	for i, num := range measurements {
-		if i < len(measurements)-2 {
-			window := num + measurements[i+1] + measurements[i+2]
-			if i > 0 && window > lastWindow {
-				increases++
-			}
-			lastWindow = window
+	for i := 0; i < len(measurements)-2; i++ {
+		window := measurements[i] + measurements[i+1] + measurements[i+2]
+
+		// Skip the first window
+		if i > 0 && window > lastWindow {
+			increases++
 		}
+		lastWindow = window
 	}
 	fmt.Println(increases)
 }
