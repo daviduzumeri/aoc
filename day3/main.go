@@ -45,25 +45,17 @@ func findNumber(numbers []int, moreCommon bool, numDigits int) int {
 		}
 	}
 
-	returnArray := make([]string, numDigits)
+	returnNumber := 0
 	for i, bit := range bits {
 		if bit {
 			if moreCommon {
-				returnArray[i] = "1"
-			} else {
-				returnArray[i] = "0"
+				returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
 			}
 		} else {
-			if moreCommon {
-				returnArray[i] = "0"
-			} else {
-				returnArray[i] = "1"
+			if !moreCommon {
+				returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
 			}
 		}
-	}
-	returnNumber, err := strconv.ParseInt(strings.Join(returnArray, ""), 2, 0)
-	if err != nil {
-		log.Fatal(err)
 	}
 	maxBit := int(math.Pow(2, float64(numDigits-1)))
 
