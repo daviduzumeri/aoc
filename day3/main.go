@@ -47,14 +47,10 @@ func findNumber(numbers []int, moreCommon bool, numDigits int) int {
 
 	returnNumber := 0
 	for i, bit := range bits {
-		if bit {
-			if moreCommon {
-				returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
-			}
-		} else {
-			if !moreCommon {
-				returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
-			}
+		if bit && moreCommon {
+			returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
+		} else if !bit && !moreCommon {
+			returnNumber += int(math.Pow(2, float64(len(bits)-i-1)))
 		}
 	}
 	maxBit := int(math.Pow(2, float64(numDigits-1)))
