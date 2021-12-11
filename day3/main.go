@@ -54,7 +54,8 @@ func findNumber(numbers []int, moreCommon bool, numDigits int) int {
 	maxBit := int(math.Pow(2, float64(numDigits-1)))
 
 	for _, number := range numbers {
-		if (int(returnNumber)&maxBit > 0 && number&maxBit > 0) || (int(returnNumber)&maxBit == 0 && number&maxBit == 0) {
+		if (int(returnNumber)&maxBit > 0 && number&maxBit > 0) ||
+			(int(returnNumber)&maxBit == 0 && number&maxBit == 0) {
 			newArray = append(newArray, number)
 		}
 	}
