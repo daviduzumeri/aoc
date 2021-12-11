@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+// NOTE: Bitwise operators was not, in retrospect, the sane way to approach this problem, but I stuck with it out of stubbornness.
+
 func findNumber(numbers []int, moreCommon bool, numDigits int) int {
 	if len(numbers) == 1 {
 		return numbers[0]
