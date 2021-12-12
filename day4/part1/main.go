@@ -110,7 +110,5 @@ mainLoop:
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(winningNumber)
-	fmt.Println(unmarkedTotal)
 	fmt.Println(unmarkedTotal * winningNumberValue)
 }
