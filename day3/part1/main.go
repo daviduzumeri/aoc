@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -52,25 +53,15 @@ func main() {
 		}
 	}
 
-	gammaArray := make([]string, numDigits)
-	epsilonArray := make([]string, numDigits)
+	gamma := 0
+	epsilon := 0
 	for i, bit := range bits {
 		if bit {
-			gammaArray[i] = "1"
-			epsilonArray[i] = "0"
+			gamma += int(math.Pow(2, float64(len(bits)-i-1)))
 		} else {
-			gammaArray[i] = "0"
-			epsilonArray[i] = "1"
+			epsilon += int(math.Pow(2, float64(len(bits)-i-1)))
 
 		}
-	}
-	gamma, err := strconv.ParseInt(strings.Join(gammaArray, ""), 2, 0)
-	if err != nil {
-		log.Fatal(err)
-	}
-	epsilon, err := strconv.ParseInt(strings.Join(epsilonArray, ""), 2, 0)
-	if err != nil {
-		log.Fatal(err)
 	}
 	fmt.Println(gamma * epsilon)
 
