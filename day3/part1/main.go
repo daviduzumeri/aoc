@@ -48,18 +48,20 @@ func main() {
 	bits := make([]bool, numDigits)
 
 	for i, numOne := range numOnes {
+		currentBitIndex := len(bits) - (i + 1)
 		if numOne > len(numbers)/2 {
-			bits[len(bits)-(i+1)] = true
+			bits[currentBitIndex] = true
 		}
 	}
 
 	gamma := 0
 	epsilon := 0
 	for i, bit := range bits {
+		currentBitIndex := float64(len(bits) - (i + 1))
 		if bit {
-			gamma += int(math.Pow(2, float64(len(bits)-i-1)))
+			gamma += int(math.Pow(2, currentBitIndex))
 		} else {
-			epsilon += int(math.Pow(2, float64(len(bits)-i-1)))
+			epsilon += int(math.Pow(2, currentBitIndex))
 
 		}
 	}
