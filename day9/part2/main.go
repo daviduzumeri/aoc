@@ -25,16 +25,16 @@ func (h heightmap) findBasin(x int, y int) int {
 	loc.marked = true
 
 	size := 1
-	if x < len(h[y])-1 && (h[y][x+1].height >= loc.height) {
+	if x < len(h[y])-1 {
 		size += h.findBasin(x+1, y)
 	}
-	if y < len(h)-1 && (h[y+1][x].height >= loc.height) {
+	if y < len(h)-1 {
 		size += h.findBasin(x, y+1)
 	}
-	if x > 0 && (h[y][x-1].height >= loc.height) {
+	if x > 0 {
 		size += h.findBasin(x-1, y)
 	}
-	if y > 0 && (h[y-1][x].height >= loc.height) {
+	if y > 0 {
 		size += h.findBasin(x, y-1)
 	}
 	return size
