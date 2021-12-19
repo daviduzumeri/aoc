@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -40,14 +41,13 @@ func diffStrings(s1 string, s2 string) string {
 	return string(returnValue)
 }
 
-func findSegmentIndex(s string, segments [10]string) int {
+func findSegmentIndex(s string, segments [10]string) (int, error) {
 	for i, segment := range segments {
 		if segment == s {
-			return i
+			return i, nil
 		}
 	}
-	log.Fatal("Below -1")
-	return -1
+	return -1, errors.New("string not in segment array")
 }
 
 func main() {
@@ -111,7 +111,11 @@ func main() {
 
 		amount := ""
 		for i := 10; i < 14; i++ {
-			amount += fmt.Sprintf("%d", findSegmentIndex(sortedFields[i], segments))
+			segmentIndex, err := findSegmentIndex(sortedFields[i], segments)
+			if err != nil {
+				log.Fatal(err)
+			}
+			amount += fmt.Sprintf("%d", segmentIndex)
 		}
 		amountInt, err := strconv.Atoi(amount)
 		if err != nil {
