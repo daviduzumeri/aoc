@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -9,10 +10,8 @@ import (
 )
 
 type cave struct {
-	name    string
-	isBig   bool
-	visited bool
-	caves   []*cave
+	name  string
+	caves []*cave
 }
 
 type caveMap map[string]*cave
@@ -20,14 +19,32 @@ type caveMap map[string]*cave
 func (cm caveMap) getCave(name string) *cave {
 	c, ok := cm[name]
 	if !ok {
-		cm[name] = &cave{
-			name:  name,
-			isBig: unicode.IsUpper(rune(name[0])),
-		}
+		cm[name] = &cave{name: name}
 		c = cm[name]
 	}
 	return c
 
+}
+
+func (cm caveMap) findPaths(c *cave, path []string) [][]string {
+	paths := [][]string{}
+	if c == nil {
+		c = cm["start"]
+	}
+	if c.name == "end" {
+		return [][]string{append(path, c.name)}
+	}
+	if unicode.IsLower(rune(c.name[0])) {
+		for _, pc := range path {
+			if pc == c.name {
+				return [][]string{}
+			}
+		}
+	}
+	for _, cp := range c.caves {
+		paths = append(paths, cm.findPaths(cp, append(path, c.name))...)
+	}
+	return paths
 }
 
 func main() {
@@ -47,5 +64,7 @@ func main() {
 		c2.caves = append(c2.caves, c1)
 	}
 
-	start := caves["start"]
+	paths := caves.findPaths(nil, []string{})
+
+	fmt.Println(len(paths))
 }
