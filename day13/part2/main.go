@@ -71,7 +71,6 @@ func main() {
 		dots[c.y][c.x] = true
 	}
 
-	// Only do first fold (for now)
 	for _, fold := range folds {
 		switch fold.axis {
 		case "x":
