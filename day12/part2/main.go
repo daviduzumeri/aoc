@@ -37,7 +37,12 @@ func (cm caveMap) findPaths(c *cave, p path) []path {
 		c = cm["start"]
 	}
 	if c.name == "end" {
-		return []path{{caves: append(p.caves, c.name), revisitedCave: p.revisitedCave}}
+		return []path{
+			{
+				caves:         append(p.caves, c.name),
+				revisitedCave: p.revisitedCave,
+			},
+		}
 	}
 	if unicode.IsLower(rune(c.name[0])) {
 		for _, pc := range p.caves {
@@ -52,7 +57,14 @@ func (cm caveMap) findPaths(c *cave, p path) []path {
 	}
 	for _, cp := range c.caves {
 		caves := append(p.caves, c.name)
-		paths = append(paths, cm.findPaths(cp, path{caves: caves, revisitedCave: p.revisitedCave})...)
+		newPaths := cm.findPaths(
+			cp,
+			path{
+				caves:         caves,
+				revisitedCave: p.revisitedCave,
+			},
+		)
+		paths = append(paths, newPaths...)
 	}
 	return paths
 }
