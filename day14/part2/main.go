@@ -18,7 +18,9 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 	template := ""
-	rules := map[string]*string{}
+	rules := map[string]string{}
+	elements := map[string]int{}
+	pairs := map[string]int{}
 	for scanner.Scan() {
 		if scanner.Text() == "" {
 			continue
@@ -26,33 +28,37 @@ func main() {
 
 		if template != "" {
 			input := strings.Split(scanner.Text(), " -> ")
-			// Build replacement string
-			to := fmt.Sprintf("%v!%v!%v", string(input[0][0]), input[1], string(input[0][1]))
-			rules[input[0]] = &to
+			rules[input[0]] = input[1]
 		} else {
 			template = scanner.Text()
 		}
 	}
 
-	for i := 0; i < 40; i++ {
-		fmt.Println(i)
-		for j := 0; j < len(template)-1; j++ {
-			fmt.Println(j)
-			pair := string(template[j]) + string(template[j+1])
-			if rules[pair] != nil {
-				template = template[0:j] + *rules[pair] + template[j+2:]
-			}
+	for i := range template {
+		elements[string(template[i])]++
+		if i == len(template)-1 {
+			break
 		}
-		template = strings.ReplaceAll(template, "!", "")
+		pairs[string(template[i])+string(template[i+1])]++
 	}
 
-	charCount := map[rune]int{}
-	for _, r := range template {
-		charCount[r]++
+	for i := 0; i < 40; i++ {
+		newPairs := map[string]int{}
+		for k, v := range pairs {
+			newPairs[k] = v
+		}
+		for from, to := range rules {
+			newPairs[from[:1]+to] += pairs[from]
+			newPairs[to+from[1:]] += pairs[from]
+			elements[to] += pairs[from]
+			newPairs[from] -= pairs[from]
+		}
+		pairs = newPairs
 	}
+
 	maxCharCount := 0
 	minCharCount := math.MaxInt
-	for _, c := range charCount {
+	for _, c := range elements {
 		if c > maxCharCount {
 			maxCharCount = c
 		}
