@@ -1,0 +1,100 @@
+package main2
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"math"
+	"os"
+	"strings"
+)
+
+type rule [2]pair
+
+type pair struct {
+	char1         rune
+	char2         rune
+	updatedAtStep int
+}
+
+func main() {
+	file, err := os.Open("input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	template := ""
+	rules := map[pair]rule{}
+	pairs := []pair{}
+	for scanner.Scan() {
+		if scanner.Text() == "" {
+			continue
+		}
+
+		if template != "" {
+			input := strings.Split(scanner.Text(), " -> ")
+			// Build replacement string
+			from := pair{char1: rune(input[0][0]), char2: rune(input[0][1])}
+			rules[from] = rule{
+				pair{char1: rune(input[0][0]), char2: rune(input[1][0])},
+				pair{char1: rune(input[1][0]), char2: rune(input[0][1])},
+			}
+		} else {
+			template = scanner.Text()
+		}
+	}
+	for i := range template {
+		if i == len(template)-1 {
+			break
+		}
+		pairs = append(
+			pairs,
+			pair{
+				char1: rune(template[i]),
+				char2: rune(template[i+1]),
+			},
+		)
+	}
+
+	for i := 1; i <= 1; i++ {
+		for j, pair := range pairs {
+			replacement := rules[pair]
+			blankRule := rule{}
+			if replacement != blankRule {
+				replacement[0].updatedAtStep = i
+				replacement[1].updatedAtStep = i
+				fmt.Println(replacement)
+				fmt.Println(pairs)
+				newPairs := append(pairs[0:j], replacement[0:]...)
+				newPairs = append(newPairs, pairs[j:]...)
+				pairs = newPairs
+				fmt.Println(pairs)
+			}
+		}
+	}
+	var output []rune
+	for _, pair := range pairs {
+		output = append(output, pair.char1)
+	}
+	output = append(output, pairs[len(pairs)-1].char2)
+
+	fmt.Println(string(output))
+
+	charCount := map[rune]int{}
+	for _, r := range template {
+		charCount[r]++
+	}
+	maxCharCount := 0
+	minCharCount := math.MaxInt
+	for _, c := range charCount {
+		if c > maxCharCount {
+			maxCharCount = c
+		}
+		if c < minCharCount {
+			minCharCount = c
+		}
+	}
+	fmt.Println(maxCharCount - minCharCount)
+}
